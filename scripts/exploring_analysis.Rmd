@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidytext)
+library(tidyverse)
+library(magrittr)
+```
+
+```{r}
+all_states <- read.csv("all_states.csv", stringsAsFactors = FALSE)
+```
+
+```{r}
+all_states %>% mutate(job_title = trimws(tolower(job_title))) %>%
+  group_by(job_title) %>% 
+  tally() %>% 
+  arrange(-n) %>% 
+  ungroup() %>% 
+  top_n(10)
+```
+
+```{r}
+common_title <- all_states %>% unnest_tokens(word, job_title) %>% count(word, sort = TRUE)
+```
+
